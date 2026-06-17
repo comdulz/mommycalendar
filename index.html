@@ -335,8 +335,8 @@
 	            const todayMax = Math.round(data.daily.temperature_2m_max[0]);
 	            const todayMin = Math.round(data.daily.temperature_2m_min[0]);
 	            document.getElementById('weather-today').innerHTML = `
-	                <div style="font-size: 3rem; margin: 5px 0;">${today.emoji}</div>
-	                <div style="font-size: 1rem; font-weight: bold;">${todayMin}°~${todayMax}°</div>
+	                <div style="font-size: 5rem; margin: 5px 0;">${today.emoji}</div>
+	                <div style="font-size: 2rem; font-weight: bold;">${todayMin}°~${todayMax}°</div>
 	            `;
 
 	            // 내일 날씨 처리
@@ -344,8 +344,8 @@
 	            const tomorrowMax = Math.round(data.daily.temperature_2m_max[1]);
 	            const tomorrowMin = Math.round(data.daily.temperature_2m_min[1]);
 	            document.getElementById('weather-tomorrow').innerHTML = `
-	                <div style="font-size: 3rem; margin: 5px 0;">${tomorrow.emoji}</div>
-	                <div style="font-size: 1rem; font-weight: bold;">${tomorrowMin}°~${tomorrowMax}°</div>
+	                <div style="font-size: 5rem; margin: 5px 0;">${tomorrow.emoji}</div>
+	                <div style="font-size: 2rem; font-weight: bold;">${tomorrowMin}°~${tomorrowMax}°</div>
 	            `;
 	        })
 	        .catch(() => {
