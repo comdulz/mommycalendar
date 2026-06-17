@@ -29,7 +29,7 @@
             justify-content: center;
             align-items: center;
             color: white;
-            padding: 20px;
+            padding: 15px;
             text-align: center;
             border-right: 3px solid white;
 	    //overflow: hidden;
@@ -63,20 +63,20 @@
             display: flex; 
             align-items: baseline; /* 오전/오후와 시간을 글자 아래 라인에 맞춰 정렬 */
             justify-content: center;
-            gap: 10px; /* 오전/오후와 시간 사이 간격 */
+            gap: 2px; /* 오전/오후와 시간 사이 간격 */
             color: white;
            /* text-shadow: 2px 2px 0 #000, -2px -2px 0 #000, 2px -2px 0 #000, -2px 2px 0 #000, 1px 1px 2px #000;*/
         }
         .ampm-small { 
-            font-size: 2.3rem; /* 오전/오후는 작게 */
+            font-size: 2.2rem; /* 오전/오후는 작게 */
             color: #ffeb3b; /* 강조색 유지 */
         }
         .time-large { 
-            font-size: 5.5rem; /* 시간은 더 크게 */
+            font-size: 4.5rem; /* 시간은 더 크게 */
             font-weight: 800; 
         }
 
-        .date { font-size: 2.2rem; font-weight: bold; line-height: 1.4; word-break: keep-all; }
+        .date { font-size: 3.2rem; font-weight: bold; line-height: 1.4; word-break: keep-all; }
         
 
 	.weather-box {
@@ -174,7 +174,7 @@
             text-align: center; 
             padding: 0 5px;
         }
-        .weather-title { font-weight: bold; margin-bottom: 5px; color: #81d4fa; }
+        .weather-title { font-size:2.2rem; font-weight: bold; margin-bottom: 5px; color: #81d4fa; }
 
 </style>
 
@@ -222,7 +222,7 @@
     <script>
         // ================= [ 사용자 설정 영역 ] =================
         // 배경으로 돌릴 아이들/가족 사진 파일명을 적어주세요. (index.html과 같은 폴더에 저장)
-        const photoFiles = ['photo1.jpg', 'photo2.jpg', 'photo3.jpg']; 
+        const photoFiles = ['photo1.jpg', 'photo2.jpg', 'photo3.jpg','photo4.jpg']; 
         const photoChangeInterval = 10000; // 사진이 바뀌는 시간 (10000 = 10초)
         const scheduleFetchInterval = 60000; // 스케줄 파일 갱신 주기 (60000 = 1분)
         
