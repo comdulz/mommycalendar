@@ -76,12 +76,12 @@
             font-weight: 800; 
         }
 
-        .date { font-size: 3.2rem; font-weight: bold; line-height: 1.4; word-break: keep-all; }
+        .date { font-size: 3.2rem; color: orange; font-weight: bold; line-height: 1.4; word-break: keep-all; }
         
 
 	.weather-box {
 	    margin-top: 20px;
-	    background: rgba(255, 255, 255, 0.15);
+	    background: rgba(100, 100, 100, 0.65);
 	    padding: 10px; /* 기존 15px에서 10px로 줄임 (공간 확보) */
 	    border-radius: 15px;
 	}
@@ -174,7 +174,7 @@
             text-align: center; 
             padding: 0 5px;
         }
-        .weather-title { font-size:2.2rem; font-weight: bold; margin-bottom: 5px; color: #81d4fa; }
+        .weather-title { font-size:2.0rem; font-weight: bold; margin-bottom: 5px; color: #81d4fa; }
 
 </style>
 
@@ -222,7 +222,7 @@
     <script>
         // ================= [ 사용자 설정 영역 ] =================
         // 배경으로 돌릴 아이들/가족 사진 파일명을 적어주세요. (index.html과 같은 폴더에 저장)
-        const photoFiles = ['photo1.jpg', 'photo2.jpg', 'photo3.jpg','photo4.jpg']; 
+        const photoFiles = ['photo1.jpg', 'photo2.jpg', 'photo3.jpg', 'photo4.jpg']; 
         const photoChangeInterval = 10000; // 사진이 바뀌는 시간 (10000 = 10초)
         const scheduleFetchInterval = 60000; // 스케줄 파일 갱신 주기 (60000 = 1분)
         
