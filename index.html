@@ -34,71 +34,66 @@
             padding: 20px 10px;
             text-align: center;
             border-right: 3px solid white;
-	    /* overflow: hidden; */
+            overflow: hidden;
         }
         .bg-slider {
             position: absolute;
             top: 0; left: 0; width: 100%; height: 100%;
-           /* filter: blur(3px); 배경 사진 블러 처리 */
-           /* transform: scale(1.1); 블러 처리 시 가장자리 하얗게 뜨는 현상 방지 */
             background-size: cover;
             background-position: center;
             transition: opacity 1.5s ease-in-out;
-	    opacity: 0;
+            opacity: 0;
             z-index: 1;
         }
-	.bg-slider.active {
-	    opacity: 1;
-	}
+        .bg-slider.active {
+            opacity: 1;
+        }
         .bg-overlay {
             position: absolute;
             top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0, 0, 0, 0. 10); /* 글씨가 잘 보이도록 어둡게 덮음 */
+            background: rgba(0, 0, 0, 0.35); /* ◀ 글씨가 선명하게 보이도록 공백 오류 수정 및 선명도 조절 */
             z-index: 2;
         }
         .left-content {
             position: relative;
-            z-index: 2;
+            z-index: 3;
             display: flex;
             flex-direction: column;
             gap: 25px;
             width: 100%;
-	    height:100%;
-	    
-	    box-sizing: border-box;
-	    padding: 20px 5px;
-	    align-items: center;
-	    justify-content: flex-start;
-
+            height: 100%;
+            box-sizing: border-box;
+            padding: 20px 5px;
+            align-items: center;
+            justify-content: flex-start;
         }
 
         .time-display { 
             display: flex; 
-            align-items: baseline; /* 오전/오후와 시간을 글자 아래 라인에 맞춰 정렬 */
+            align-items: baseline; 
             justify-content: center;
-            gap: 2px; /* 오전/오후와 시간 사이 간격 */
+            gap: 6px; 
             color: white;
-           /* text-shadow: 2px 2px 0 #000, -2px -2px 0 #000, 2px -2px 0 #000, -2px 2px 0 #000, 1px 1px 2px #000;*/
         }
         .ampm-small { 
-            font-size: 2.2rem; /* 오전/오후는 작게 */
-            color: #ffeb3b; /* 강조색 유지 */
+            font-size: 2.2rem; 
+            color: #ffeb3b; 
         }
         .time-large { 
-            font-size: 4.5rem; /* 시간은 더 크게 */
+            font-size: 4.5rem; 
             font-weight: 800; 
         }
 
         .date { font-size: 3.2rem; color: orange; font-weight: bold; line-height: 1.4; word-break: keep-all; }
         
-
-	.weather-box {
-	    margin-top: auto;
-	    background: rgba(100, 100, 100, 0.5);
-	    padding: 5px 5px; /* 기존 15px에서 10px로 줄임 (공간 확보) */
-	    border-radius: 15px;
-	    z-index: 3;
-	}
+        .weather-box {
+            margin-top: auto;
+            background: rgba(100, 100, 100, 0.5);
+            padding: 8px 12px; 
+            border-radius: 15px;
+            z-index: 4;
+            width: 95%;
+        }
         .weather-title { font-weight: bold; margin-bottom: 8px; color: #81d4fa; }
 
         /* 오른쪽 2/3 영역: 달력 */
@@ -131,8 +126,8 @@
             padding-bottom: 10px;
             border-bottom: 2px solid #ccc;
         }
-        .day-label:nth-child(1) { color: #d32f2f; } /* 일요일 빨간색 */
-        .day-label:nth-child(7) { color: #1976d2; } /* 토요일 파란색 */
+        .day-label:nth-child(1) { color: #d32f2f; } 
+        .day-label:nth-child(7) { color: #1976d2; } 
 
         .cell {
             border: 1px solid #e0e0e0;
@@ -149,11 +144,9 @@
             font-size: 1.8rem;
             font-weight: bold;
         }
-        /* 일요일, 토요일 날짜 색상 */
         .cell.sun .day-num { color: #d32f2f; }
         .cell.sat .day-num { color: #1976d2; }
         
-        /* 오늘 날짜 하이라이트 */
         .cell.today {
             background-color: #e8f5e9;
             border: 4px solid #2e7d32;
@@ -163,13 +156,11 @@
             font-size: 2rem;
         }
 
-        /* 스케줄 표기 (최대 4글자 내외 최적화) */
         .sched-text {
             margin-top: 4px;
             font-size: 1.15rem;
             font-weight: bold;
-            color: #ee82ee; /* 눈에 잘 띄는 붉은 계열 */
-            /* background-color: #d3d3d3; */
+            color: #ee82ee; 
             padding: 1px 1px;
             border-radius: 4px;
             width: 100%;
@@ -178,7 +169,7 @@
             overflow: hidden;
             text-overflow: ellipsis;
         }    
-	/*날씨 표시 */
+        
         .weather-row { 
             display: flex; 
             justify-content: space-between; 
@@ -189,9 +180,6 @@
             padding: 0 5px;
         }
         .weather-title { font-size:2.0rem; font-weight: bold; margin-bottom: 5px; color: #81d4fa; }
-
-</style>
-
     </style>
 </head>
 <body>
@@ -206,18 +194,18 @@
                 <div class="date" id="date">1월 1일<br>(목요일)</div>
                 <div class="time-display" id="time-display">오전 00:00</div>
                 
-                <div class="weather-box">		<!-- 왼쪽 패널 내의 날씨 박스 부분 -->
-		    <div class="weather-row">
-		        <div class="weather-col">
-		            <div class="weather-title">오늘</div>
-		            <div id="weather-today" style="font-size: 0.9em;">...</div>
-		        </div>
-		        <div class="weather-col" style="border-left: 1px solid rgba(255,255,255,0.3);">
-		            <div class="weather-title">내일</div>
-		            <div id="weather-tomorrow" style="font-size: 0.9em;">...</div>
-		        </div>
-		    </div>
-		</div>
+                <div class="weather-box">
+                    <div class="weather-row">
+                        <div class="weather-col">
+                            <div class="weather-title">오늘</div>
+                            <div id="weather-today" style="font-size: 0.9em;">...</div>
+                        </div>
+                        <div class="weather-col" style="border-left: 1px solid rgba(255,255,255,0.3);">
+                            <div class="weather-title">내일</div>
+                            <div id="weather-tomorrow" style="font-size: 0.9em;">...</div>
+                        </div>
+                    </div>
+                </div>
              </div>
         </div>
 
@@ -231,45 +219,76 @@
                 <div class="day-label">목</div>
                 <div class="day-label">금</div>
                 <div class="day-label" style="color:#1976d2">토</div>
-                </div>
+            </div>
         </div>
     </div>
 
     <script>
         // ================= [ 사용자 설정 영역 ] =================
-        // 배경으로 돌릴 아이들/가족 사진 파일명을 적어주세요. (index.html과 같은 폴더에 저장)
-        const photoFiles = ['photo1.jpg', 'photo2.jpg', 'photo3.jpg', 'photo4.jpg',, 'photo5.jpg',, 'photo6.jpg']; 
-        const photoChangeInterval = 10000; // 사진이 바뀌는 시간 (10000 = 10초)
-        const scheduleFetchInterval = 60000; // 스케줄 파일 갱신 주기 (60000 = 1분)
+        let photoFiles = []; 
+        const photoExtensions = ['jpg', 'JPG', 'jpeg', 'JPEG', 'png', 'PNG']; 
+
+        const photoChangeInterval = 10000; 
+        const scheduleFetchInterval = 60000; 
         
-        // 날씨를 받아올 지역의 위도와 경도 (현재 기본값: 서울)
         const LATITUDE = 37.5665;
         const LONGITUDE = 126.9780;
         // ========================================================
 
         let currentSchedules = {};
         let photoIndex = 0;
-	let currentBg =1;
+        let currentBg = 1;
+
+        function checkImageExists(url) {
+            return new Promise((resolve) => {
+                const img = new Image();
+                img.onload = () => resolve(true);  
+                img.onerror = () => resolve(false); 
+                img.src = url;
+            });
+        }
+   
+        async function discoverPhotos() {
+            let i = 1;
+            while (true) {
+                let found = false;
+                for (const ext of photoExtensions) {
+                    const testUrl = `photo${i}.${ext}`;
+                    const exists = await checkImageExists(testUrl);
+                    
+                    if (exists) {
+                        photoFiles.push(testUrl); 
+                        found = true;
+                        break; 
+                    }
+                }
+                if (!found) {
+                    break;
+                }
+                i++;
+            }
+         
+            // 🎯 사진을 전부 다 찾았을 때, 비로소 첫 번째 배경 이미지를 띄워줍니다.
+            if (photoFiles.length > 0) {
+                updateBackground();
+            } else {
+                console.log("포토 파일을 하나도 찾지 못했습니다. 파일명(photo1...)과 위치를 확인해주세요.");
+            }
+        }
 
         // 1. 시계 및 날짜 업데이트 (매 초 작동)
         function updateClock() {
             const now = new Date();
-
-            // 오전오후 계산
             const hours24 = now.getHours();
             const ampmStr = hours24 >= 12 ? "오후" : "오전";
 
-	    // 시간 분 계산
             let hours12 = hours24 % 12;
             hours12 = hours12 ? hours12 : 12;
             const minutes = String(now.getMinutes()).padStart(2, '0');
             
-            // span 태그를 사용하여 클래스를 따로 적용합니다.
             document.getElementById('time-display').innerHTML = 
                 `<span class="ampm-small">${ampmStr}</span><span class="time-large">${hours12}:${minutes}</span>`;
             
-            // 날짜 표시
-            const year = now.getFullYear();
             const month = now.getMonth() + 1;
             const date = now.getDate();
             const weekDays = ["일요일", "월요일", "화요일", "수요일", "목요일", "금요일", "토요일"];
@@ -277,66 +296,40 @@
             
             document.getElementById('date').innerHTML = `${month}월 ${date}일<br>(${dayName})`;
             
-            // 자정이 지나서 날짜가 바뀌거나 달이 바뀔 때 달력을 새로 그리기 위해 매 분 체크
             if (now.getSeconds() === 0 && now.getMinutes() === 0) {
                 renderCalendar();
-         }
-	}
+            }
+        }
 
         // 2. 배경 사진 슬라이드쇼
-	function updateBackground() {
-	    if (photoFiles.length === 0) return;
-    
-	    // 다음에 사진을 띄울 슬라이더(next)와 지금 켜져 있는 슬라이더(current) 구하기
-	    const nextBg = currentBg === 1 ? 2 : 1;
-	    const currentSlider = document.getElementById(`bgSlider${currentBg}`);
-	    const nextSlider = document.getElementById(`bgSlider${nextBg}`);
-	    
-	    // 1. 뒤에서 대기 중인 슬라이더에 다음 사진을 미리 로드합니다.
-	    nextSlider.style.backgroundImage = `url('${photoFiles[photoIndex]}?v=${Date.now()}')`;
-    
-	    // 2. 다음 사진을 스르륵 켜고(active 추가), 기존 사진은 스르륵 끕니다(active 제거)
-	    nextSlider.classList.add('active');
-	    currentSlider.classList.remove('active');
-	    
-	    // 3. 현재 켜진 슬라이더 번호를 교체해 줍니다.
-	    currentBg = nextBg;
-	    photoIndex = (photoIndex + 1) % photoFiles.length;
-	}
-
-        /* 3. 서버에서 스케줄 JSON 파일 가져오기 - 임시로 막음
-        function fetchSchedules() {
-            // 캐시 분쇄용 쿼리스트링 추가하여 매번 서버에서 최신 파일을 읽어오도록 유도
-            fetch(`schedule.js?nocache=${Date.now()}`)
-                .then(response => {
-                    if (!response.ok) throw new Error('스케줄 파일을 찾을 수 없습니다.');
-                    return response.json();
-                })
-                .then(data => {
-                    currentSchedules = data;
-                    renderCalendar(); // 스케줄을 받으면 달력을 다시 그립니다.
-                })
-                .catch(err => {
-                    console.log('스케줄 로드 실패:', err);
-                });
-        } */
+        function updateBackground() {
+            if (photoFiles.length === 0) return;
+         
+            const nextBg = currentBg === 1 ? 2 : 1;
+            const currentSlider = document.getElementById(`bgSlider${currentBg}`);
+            const nextSlider = document.getElementById(`bgSlider${nextBg}`);
+            
+            nextSlider.style.backgroundImage = `url('${photoFiles[photoIndex]}?v=${Date.now()}')`;
+         
+            nextSlider.classList.add('active');
+            currentSlider.classList.remove('active');
+            
+            currentBg = nextBg;
+            photoIndex = (photoIndex + 1) % photoFiles.length;
+        }
 
         // 3. 서버 또는 로컬에서 스케줄 JS 파일 가져오기
         function fetchSchedules() {
-            // PC 로컬 실행(file:)일 때는 쿼리스트링(?nocache)을 제거하고, 서버일 때만 붙여서 캐시를 방지합니다.
             const isLocal = window.location.protocol === 'file:';
             const cacheBust = isLocal ? '' : `?nocache=${Date.now()}`;
             
-            // 기존에 불러왔던 스크립트 태그가 있다면 제거 (실시간 갱신용)
             const oldScript = document.getElementById('dynamic-schedule-script');
             if (oldScript) oldScript.remove();
 
-            // 스케줄 파일을 새로 불러오는 태그 생성
             const script = document.createElement('script');
             script.id = 'dynamic-schedule-script';
             script.src = `schedule.js${cacheBust}`;
             
-            // 파일이 성공적으로 읽어와지면 달력을 다시 그립니다.
             script.onload = function() {
                 if (window.mySchedules) {
                     currentSchedules = window.mySchedules;
@@ -351,96 +344,85 @@
             document.body.appendChild(script);
         }
 
-        // 4. 공공 날씨 API 호출 (Open-Meteo 사용: 인증키 불필요)
-	function fetchWeather() {
-	    const url = `https://api.open-meteo.com/v1/forecast?latitude=${LATITUDE}&longitude=${LONGITUDE}&daily=weathercode,temperature_2m_max,temperature_	2m_min&timezone=Asia%2FSeoul`;
-    
-	    fetch(url)
-	        .then(res => res.json())
-	        .then(data => {
-	            // 오늘 날씨 처리
-	            const today = getWeatherInfo(data.daily.weathercode[0]);
-	            const todayMax = Math.round(data.daily.temperature_2m_max[0]);
-	            const todayMin = Math.round(data.daily.temperature_2m_min[0]);
-	            document.getElementById('weather-today').innerHTML = `
-	                <div style="font-size: 4rem; margin: 5px 0;">${today.emoji}</div>
-	                <div style="font-size: 2rem; font-weight: bold;">${todayMin}°~${todayMax}°</div>
-	            `;
+        // 4. 공공 날씨 API 호출
+        function fetchWeather() {
+            // 🎯 주소 내부 오타와 공백 제거 완료
+            const url = `https://api.open-meteo.com/v1/forecast?latitude=${LATITUDE}&longitude=${LONGITUDE}&daily=weathercode,temperature_2m_max,temperature_2m_min&timezone=Asia%2FSeoul`;
+         
+            fetch(url)
+                .then(res => res.json())
+                .then(data => {
+                    const today = getWeatherInfo(data.daily.weathercode[0]);
+                    const todayMax = Math.round(data.daily.temperature_2m_max[0]);
+                    const todayMin = Math.round(data.daily.temperature_2m_min[0]);
+                    document.getElementById('weather-today').innerHTML = `
+                        <div style="font-size: 4rem; margin: 5px 0;">${today.emoji}</div>
+                        <div style="font-size: 2rem; font-weight: bold;">${todayMin}°~${todayMax}°</div>
+                    `;
 
-	            // 내일 날씨 처리
-	            const tomorrow = getWeatherInfo(data.daily.weathercode[1]);
-	            const tomorrowMax = Math.round(data.daily.temperature_2m_max[1]);
-	            const tomorrowMin = Math.round(data.daily.temperature_2m_min[1]);
-	            document.getElementById('weather-tomorrow').innerHTML = `
-	                <div style="font-size: 4rem; margin: 5px 0;">${tomorrow.emoji}</div>
-	                <div style="font-size: 2rem; font-weight: bold;">${tomorrowMin}°~${tomorrowMax}°</div>
-	            `;
-	        })
-	        .catch(() => {
-	            document.getElementById('weather-today').innerText = "날씨 정보 없음";
-	        });
-	}
+                    const tomorrow = getWeatherInfo(data.daily.weathercode[1]);
+                    const tomorrowMax = Math.round(data.daily.temperature_2m_max[1]);
+                    const tomorrowMin = Math.round(data.daily.temperature_2m_min[1]);
+                    document.getElementById('weather-tomorrow').innerHTML = `
+                        <div style="font-size: 4rem; margin: 5px 0;">${tomorrow.emoji}</div>
+                        <div style="font-size: 2rem; font-weight: bold;">${tomorrowMin}°~${tomorrowMax}°</div>
+                    `;
+                })
+                .catch(() => {
+                    document.getElementById('weather-today').innerText = "날씨 정보 없음";
+                });
+        }
 
-        // 날씨 코드를 한글 텍스트/이모지로 변환
-	function getWeatherInfo(code) {
-	    if (code === 0) return { emoji: '☀️', desc: '맑음' };
-	    if ([1, 2, 3].includes(code)) return { emoji: '⛅', desc: '구름조금' };
-	    if ([45, 48].includes(code)) return { emoji: '🌫️', desc: '안개' };
-	    if ([51, 53, 55, 61, 63, 65, 80, 81, 82].includes(code)) return { emoji: '🌧️', desc: '비가끔' };
-	    if ([71, 73, 75, 85, 86].includes(code)) return { emoji: '❄️', desc: '눈' };
-	    if ([95, 96, 99].includes(code)) return { emoji: '⚡', desc: '번개' };
-	    return { emoji: '☁️', desc: '흐림' };
-	}
+        function getWeatherInfo(code) {
+            if (code === 0) return { emoji: '☀️', desc: '맑음' };
+            if ([1, 2, 3].includes(code)) return { emoji: '⛅', desc: '구름조금' };
+            if ([45, 48].includes(code)) return { emoji: '🌫️', desc: '안개' };
+            if ([51, 53, 55, 61, 63, 65, 80, 81, 82].includes(code)) return { emoji: '🌧️', desc: '비가끔' };
+            if ([71, 73, 75, 85, 86].includes(code)) return { emoji: '❄️', desc: '눈' };
+            if ([95, 96, 99].includes(code)) return { emoji: '⚡', desc: '번개' };
+            return { emoji: '☁️', desc: '흐림' };
+        }
 
         // 5. 달력 생성 및 스케줄 매핑
         function renderCalendar() {
             const now = new Date();
             const currentYear = now.getFullYear();
-            const currentMonth = now.getMonth(); // 0 = 1월
+            const currentMonth = now.getMonth(); 
             const todayDate = now.getDate();
 
-            // 상단 제목 (예: 2026년 6월)
             document.getElementById('calendarMonth').innerText = `${currentYear}년 ${currentMonth + 1}월`;
 
-            // 기존 날짜 세포들 삭제 (요일 라벨 제외하고 전부 제거)
             const grid = document.getElementById('calendarGrid');
             const labels = grid.querySelectorAll('.day-label');
             grid.innerHTML = '';
             labels.forEach(label => grid.appendChild(label));
 
-            // 해당 월의 첫날 요일 및 총 일수 구하기
             const firstDayIndex = new Date(currentYear, currentMonth, 1).getDay();
             const totalDays = new Date(currentYear, currentMonth + 1, 0).getDate();
 
-            // 1일이 시작하기 전 빈칸 메우기
             for (let i = 0; i < firstDayIndex; i++) {
                 const blankCell = document.createElement('div');
                 blankCell.className = 'cell';
                 grid.appendChild(blankCell);
             }
 
-            // 날짜 채우기
             for (let day = 1; day <= totalDays; day++) {
                 const cell = document.createElement('div');
                 cell.className = 'cell';
                 
-                // 요일별 클래스 추가 (색상 지정용)
                 const dayOfWeek = (firstDayIndex + day - 1) % 7;
                 if (dayOfWeek === 0) cell.classList.add('sun');
                 if (dayOfWeek === 6) cell.classList.add('sat');
 
-                // 오늘 날짜 하이라이트
                 if (day === todayDate) {
                     cell.classList.add('today');
                 }
 
-                // 날짜 숫자 추가
                 const dayNumSpan = document.createElement('span');
                 dayNumSpan.className = 'day-num';
                 dayNumSpan.innerText = day;
                 cell.appendChild(dayNumSpan);
 
-                // 스케줄 확인 및 표기 (형식: YYYY-MM-DD)
                 const dateKey = `${currentYear}-${String(currentMonth + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
                 if (currentSchedules[dateKey]) {
                     const schedDiv = document.createElement('div');
@@ -453,19 +435,20 @@
             }
         }
 
-        // 최초 실행 및 타이머 가동
+        // 🎯 최초 실행 및 타이머 제어 정렬
         updateClock();
         setInterval(updateClock, 1000);
 
-        updateBackground();
+        // [수정 완료] 단순히 updateBackground()만 켜는 게 아니라, 사진을 완전히 다 탐색(discoverPhotos)한 후에 첫 배경을 띄우고 돌립니다.
+        discoverPhotos(); 
         setInterval(updateBackground, photoChangeInterval);
 
-	renderCalendar(); //달력로딩
+        renderCalendar(); 
         fetchSchedules();
         setInterval(fetchSchedules, scheduleFetchInterval);
 
         fetchWeather();
-        setInterval(fetchWeather, 1800000); // 날씨는 30분에 한 번씩만 갱신
+        setInterval(fetchWeather, 1800000); 
     </script>
 </body>
 </html>
