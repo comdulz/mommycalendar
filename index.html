@@ -231,8 +231,16 @@
         const photoChangeInterval = 10000; 
         const scheduleFetchInterval = 60000; 
         
-        const LATITUDE = 37.5665;
-        const LONGITUDE = 126.9780;
+        const LATITUDE = 37.6377;
+        const LONGITUDE = 126.8392;
+        // ==== [ 추가된 밝기/어둠 제어 설정 ] ====
+        const EVENING_START = 20;  // 🌙 저녁 모드 시작 시간 (오후 8시)
+        const NIGHT_START = 22;    // 🛏️ 심야 모드 시작 시간 (밤 10시)
+        const DAY_START = 6;       // ☀️ 낮 모드 시작 시간 (아침 6시)
+
+        const EVENING_DARKNESS = 0.35; // 저녁에 어두워지는 정도 (0.0: 투명 ~ 1.0: 완전 까맣게)
+        const NIGHT_DARKNESS = 0.75;   // 밤에 깜깜해지는 정도 (0.75 정도면 눈이 아주 편안합니다)
+
         // ========================================================
 
         let currentSchedules = {};
