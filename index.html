@@ -238,6 +238,32 @@
         const NIGHT_START = 22;    // 🛏️ 심야 모드 시작 시간 (밤 10시)
         const DAY_START = 6;       // ☀️ 낮 모드 시작 시간 (아침 6시)
 
+       // 🎯 [추가] 대한민국 공휴일 데이터 베이스
+       // 매년 양력 고정 휴일은 'MM-DD', 매년 바뀌는 명절 및 대체공휴일은 'YYYY-MM-DD'로 작성합니다.
+       const koreanHolidays = {
+           // 1. 매년 고정된 양력 국경일
+           "01-01": "신정",
+           "03-01": "삼일절",
+           "05-05": "어린이날",
+           "06-06": "현충일",
+           "08-15": "광복절",
+           "10-03": "개천절",
+           "10-09": "한글날",
+           "12-25": "성탄절",
+
+          // 2. 2026년 음력 명절 및 대체공휴일 확정 데이터
+          "2026-02-17": "설날",
+          "2026-02-18": "설날",
+          "2026-02-19": "설날",
+          "2026-05-25": "대체공휴일", 
+          "2026-09-24": "추석",
+          "2026-09-25": "추석",
+          "2026-09-26": "추석",
+          "2026-09-28": "대체공휴일"  
+        };
+
+
+        
         const EVENING_DARKNESS = 0.35; // 저녁에 어두워지는 정도 (0.0: 투명 ~ 1.0: 완전 까맣게)
         const NIGHT_DARKNESS = 0.75;   // 밤에 깜깜해지는 정도 (0.75 정도면 눈이 아주 편안합니다)
 
@@ -425,6 +451,24 @@
                 if (day === todayDate) {
                     cell.classList.add('today');
                 }
+
+
+                // 🎯 한국 공휴일 매핑용 검색 키 생성 (예: 2026-05-05 또는 05-05)
+                const dateKey = `${currentYear}-${String(currentMonth + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+                const solarKey = `${String(currentMonth + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+
+                // 오늘이 공휴일 목록에 있는지 확인
+                const holidayName = koreanHolidays[dateKey] || koreanHolidays[solarKey];
+
+                if (holidayName) {
+                    cell.classList.add('sun'); // 일요일과 똑같은 빨간색 테마(sun)를 강제로 적용합니다.
+    
+                // 날짜 밑에 '어린이날', '추석' 같은 글자를 추가합니다.
+                    const holidayDiv = document.createElement('div');
+                    holidayDiv.className = 'holiday-text';
+                    holidayDiv.innerText = holidayName;
+                    cell.appendChild(holidayDiv);
+                }   
 
                 const dayNumSpan = document.createElement('span');
                 dayNumSpan.className = 'day-num';
