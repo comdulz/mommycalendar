@@ -14,6 +14,7 @@
             overflow: hidden;
             display: flex;
             background-color: #000;
+            transition: background-color 1s ease-in-out;
         }
         
         .container {
@@ -35,6 +36,7 @@
             text-align: center;
             border-right: 3px solid white;
             overflow: hidden;
+            transition: border-color 1s ease-in-out;
         }
         .bg-slider {
             position: absolute;
@@ -51,8 +53,9 @@
         .bg-overlay {
             position: absolute;
             top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0, 0, 0, 0.35); /* ◀ 글씨가 선명하게 보이도록 공백 오류 수정 및 선명도 조절 */
+            background: rgba(0, 0, 0, 0.2); 
             z-index: 2;
+            transition: background 1s ease-in-out;
         }
         .left-content {
             position: relative;
@@ -94,7 +97,6 @@
             z-index: 4;
             width: 95%;
         }
-        .weather-title { font-weight: bold; margin-bottom: 8px; color: #81d4fa; }
 
         /* 오른쪽 2/3 영역: 달력 */
         .right-panel {
@@ -104,6 +106,7 @@
             display: flex;
             flex-direction: column;
             padding: 25px 25px;
+            transition: background-color 1s ease-in-out, color 1s ease-in-out;
         }
         .calendar-header {
             font-size: 3rem;
@@ -111,6 +114,7 @@
             text-align: center;
             margin-bottom: 20px;
             color: #1a237e;
+            transition: color 1s ease-in-out;
         }
         .calendar-grid {
             display: grid;
@@ -125,6 +129,7 @@
             font-weight: bold;
             padding-bottom: 10px;
             border-bottom: 2px solid #ccc;
+            transition: border-color 1s ease-in-out;
         }
         .day-label:nth-child(1) { color: #d32f2f; } 
         .day-label:nth-child(7) { color: #1976d2; } 
@@ -139,6 +144,7 @@
             align-items: center;
             background-color: #fafafa;
             overflow: hidden;
+            transition: background-color 1s ease-in-out, border-color 1s ease-in-out;
         }
         .cell .day-num {
             font-size: 1.8rem;
@@ -156,8 +162,17 @@
             font-size: 2rem;
         }
 
+        /* 공휴일 이름 스타일 */
+        .holiday-text {
+            margin-top: 2px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            color: #d32f2f;
+            text-align: center;
+        }
+
         .sched-text {
-            margin-top: 4px;
+            margin-top: auto; 
             font-size: 1.15rem;
             font-weight: bold;
             color: #ee82ee; 
@@ -180,6 +195,18 @@
             padding: 0 5px;
         }
         .weather-title { font-size:2.0rem; font-weight: bold; margin-bottom: 5px; color: #81d4fa; }
+
+        /* 🌙 밤 시간대 어머니의 눈을 위한 우아한 다크모드 스타일 */
+        body.dark-mode .right-panel { background-color: #1a1a1a; color: #e0e0e0; }
+        body.dark-mode .left-panel { border-right: 3px solid #333; }
+        body.dark-mode .calendar-header { color: #90caf9; }
+        body.dark-mode .day-label { border-bottom: 2px solid #444; }
+        body.dark-mode .cell { background-color: #262626; border: 1px solid #3a3a3a; }
+        body.dark-mode .cell.sun .day-num { color: #ef9a9a; }
+        body.dark-mode .cell.sat .day-num { color: #90caf9; }
+        body.dark-mode .holiday-text { color: #ef9a9a; }
+        body.dark-mode .cell.today { background-color: #1b5e20; border: 4px solid #4caf50; }
+        body.dark-mode .cell.today .day-num { color: #a5d6a7; }
     </style>
 </head>
 <body>
@@ -233,40 +260,53 @@
         
         const LATITUDE = 37.6377;
         const LONGITUDE = 126.8392;
-        // ==== [ 추가된 밝기/어둠 제어 설정 ] ====
+
+        // ==== [ 밝기/어둠 제어 설정 ] ====
         const EVENING_START = 20;  // 🌙 저녁 모드 시작 시간 (오후 8시)
         const NIGHT_START = 22;    // 🛏️ 심야 모드 시작 시간 (밤 10시)
         const DAY_START = 6;       // ☀️ 낮 모드 시작 시간 (아침 6시)
 
-       // 🎯 [추가] 대한민국 공휴일 데이터 베이스
-       // 매년 양력 고정 휴일은 'MM-DD', 매년 바뀌는 명절 및 대체공휴일은 'YYYY-MM-DD'로 작성합니다.
-       const koreanHolidays = {
-           // 1. 매년 고정된 양력 국경일
-           "01-01": "신정",
-           "03-01": "삼일절",
-           "05-05": "어린이날",
-           "06-06": "현충일",
-           "08-15": "광복절",
-           "10-03": "개천절",
-           "10-09": "한글날",
-           "12-25": "성탄절",
+        const EVENING_DARKNESS = 0.45; // 저녁 슬라이더 어두워지는 투명도
+        const NIGHT_DARKNESS = 0.75;   // 밤에 깜깜해지는 투명도
 
-          // 2. 2026년 음력 명절 및 대체공휴일 확정 데이터
-          "2026-02-17": "설날",
-          "2026-02-18": "설날",
-          "2026-02-19": "설날",
-          "2026-05-25": "대체공휴일", 
-          "2026-09-24": "추석",
-          "2026-09-25": "추석",
-          "2026-09-26": "추석",
-          "2026-09-28": "대체공휴일"  
+        // 🎯 대한민국 공휴일 데이터베이스 (2026년 ~ 2027년 전체 확정본)
+        const koreanHolidays = {
+            // 1. 매년 고정된 양력 국경일
+            "01-01": "신정",
+            "03-01": "삼일절",
+            "05-05": "어린이날",
+            "06-06": "현충일",
+            "08-15": "광복절",
+            "10-03": "개천절",
+            "10-09": "한글날",
+            "12-25": "성탄절",
+
+            // 2. 2026년 음력 명절 및 대체공휴일
+            "2026-02-17": "설날",
+            "2026-02-18": "설날",
+            "2026-02-19": "설날",
+            "2026-05-25": "대체공휴일", 
+            "2026-09-24": "추석",
+            "2026-09-25": "추석",
+            "2026-09-26": "추석",
+            "2026-09-28": "대체공휴일", 
+
+            // 3. 2027년 음력 명절 및 대체공휴일
+            "2027-02-05": "설날 연휴",
+            "2027-02-06": "설날",
+            "2027-02-07": "설날 연휴",
+            "2027-02-08": "대체공휴일", 
+            "2027-05-13": "부처님오신날",
+            "2027-06-07": "대체공휴일", 
+            "2027-08-16": "대체공휴일", 
+            "2027-10-04": "대체공휴일", 
+            "2027-10-11": "대체공휴일", 
+            "2027-10-14": "추석 연휴",
+            "2027-10-15": "추석",
+            "2027-10-16": "추석 연휴",
+            "2027-10-18": "대체공휴일", 
+            "2027-12-27": "대체공휴일"  
         };
-
-
-        
-        const EVENING_DARKNESS = 0.35; // 저녁에 어두워지는 정도 (0.0: 투명 ~ 1.0: 완전 까맣게)
-        const NIGHT_DARKNESS = 0.75;   // 밤에 깜깜해지는 정도 (0.75 정도면 눈이 아주 편안합니다)
-
         // ========================================================
 
         let currentSchedules = {};
@@ -302,15 +342,14 @@
                 i++;
             }
          
-            // 🎯 사진을 전부 다 찾았을 때, 비로소 첫 번째 배경 이미지를 띄워줍니다.
             if (photoFiles.length > 0) {
                 updateBackground();
             } else {
-                console.log("포토 파일을 하나도 찾지 못했습니다. 파일명(photo1...)과 위치를 확인해주세요.");
+                console.log("포토 파일을 하나도 찾지 못했습니다.");
             }
         }
 
-        // 1. 시계 및 날짜 업데이트 (매 초 작동)
+        // 1. 시계 업데이트 및 시간대별 야간 감광 제어 연동
         function updateClock() {
             const now = new Date();
             const hours24 = now.getHours();
@@ -330,6 +369,19 @@
             
             document.getElementById('date').innerHTML = `${month}월 ${date}일<br>(${dayName})`;
             
+            // 사용자가 설정한 변수값으로 배경 투명도 및 다크모드 제어
+            const overlay = document.querySelector('.bg-overlay');
+            if (hours24 >= NIGHT_START || hours24 < DAY_START) {
+                overlay.style.backgroundColor = `rgba(0, 0, 0, ${NIGHT_DARKNESS})`;
+                document.body.classList.add('dark-mode'); 
+            } else if (hours24 >= EVENING_START) {
+                overlay.style.backgroundColor = `rgba(0, 0, 0, ${EVENING_DARKNESS})`;
+                document.body.classList.remove('dark-mode'); 
+            } else {
+                overlay.style.backgroundColor = `rgba(0, 0, 0, 0.25)`; 
+                document.body.classList.remove('dark-mode'); 
+            }
+
             if (now.getSeconds() === 0 && now.getMinutes() === 0) {
                 renderCalendar();
             }
@@ -352,7 +404,7 @@
             photoIndex = (photoIndex + 1) % photoFiles.length;
         }
 
-        // 3. 서버 또는 로컬에서 스케줄 JS 파일 가져오기
+        // 3. 스케줄 JS 파일 로드
         function fetchSchedules() {
             const isLocal = window.location.protocol === 'file:';
             const cacheBust = isLocal ? '' : `?nocache=${Date.now()}`;
@@ -370,17 +422,12 @@
                     renderCalendar();
                 }
             };
-            
-            script.onerror = function() {
-                console.log('schedule.js 파일을 찾을 수 없습니다.');
-            };
 
             document.body.appendChild(script);
         }
 
-        // 4. 공공 날씨 API 호출
+        // 4. 날씨 API 호출
         function fetchWeather() {
-            // 🎯 주소 내부 오타와 공백 제거 완료
             const url = `https://api.open-meteo.com/v1/forecast?latitude=${LATITUDE}&longitude=${LONGITUDE}&daily=weathercode,temperature_2m_max,temperature_2m_min&timezone=Asia%2FSeoul`;
          
             fetch(url)
@@ -417,7 +464,7 @@
             return { emoji: '☁️', desc: '흐림' };
         }
 
-        // 5. 달력 생성 및 스케줄 매핑
+        // 5. 달력 생성 및 공휴일 렌더링
         function renderCalendar() {
             const now = new Date();
             const currentYear = now.getFullYear();
@@ -452,30 +499,26 @@
                     cell.classList.add('today');
                 }
 
-
-                // 🎯 한국 공휴일 매핑용 검색 키 생성 (예: 2026-05-05 또는 05-05)
-                const dateKey = `${currentYear}-${String(currentMonth + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
-                const solarKey = `${String(currentMonth + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
-
-                // 오늘이 공휴일 목록에 있는지 확인
-                const holidayName = koreanHolidays[dateKey] || koreanHolidays[solarKey];
-
-                if (holidayName) {
-                    cell.classList.add('sun'); // 일요일과 똑같은 빨간색 테마(sun)를 강제로 적용합니다.
-    
-                // 날짜 밑에 '어린이날', '추석' 같은 글자를 추가합니다.
-                    const holidayDiv = document.createElement('div');
-                    holidayDiv.className = 'holiday-text';
-                    holidayDiv.innerText = holidayName;
-                    cell.appendChild(holidayDiv);
-                }   
-
                 const dayNumSpan = document.createElement('span');
                 dayNumSpan.className = 'day-num';
                 dayNumSpan.innerText = day;
                 cell.appendChild(dayNumSpan);
 
                 const dateKey = `${currentYear}-${String(currentMonth + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+                const solarKey = `${String(currentMonth + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+                
+                const holidayName = koreanHolidays[dateKey] || koreanHolidays[solarKey];
+                
+                // 오늘이 공휴일인 경우 빨간색 지정 및 명칭 표기
+                if (holidayName) {
+                    cell.classList.add('sun'); 
+                    const holidayDiv = document.createElement('div');
+                    holidayDiv.className = 'holiday-text';
+                    holidayDiv.innerText = holidayName;
+                    cell.appendChild(holidayDiv);
+                }
+
+                // 어머니 개인 일정 표기
                 if (currentSchedules[dateKey]) {
                     const schedDiv = document.createElement('div');
                     schedDiv.className = 'sched-text';
@@ -487,11 +530,10 @@
             }
         }
 
-        // 🎯 최초 실행 및 타이머 제어 정렬
+        // 시스템 시작
         updateClock();
         setInterval(updateClock, 1000);
 
-        // [수정 완료] 단순히 updateBackground()만 켜는 게 아니라, 사진을 완전히 다 탐색(discoverPhotos)한 후에 첫 배경을 띄우고 돌립니다.
         discoverPhotos(); 
         setInterval(updateBackground, photoChangeInterval);
 
